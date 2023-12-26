@@ -1,98 +1,125 @@
 .app {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  text-align: center;
-  background: #f7f7f7;
+  height: 100vh;
   font-family: 'Arial', sans-serif;
-}
-
-header {
-  padding-top: 10px;
-}
-
-header button {
-  padding: 10px 20px;
-  margin-bottom: 20px;
-  font-size: 16px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  background-color: #f7f7f7;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 main {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.message {
+  font-size: 1.5em;
+  margin: 10px 0;
+  padding: 5px;
+  border-radius: 5px;
+  color: white;
+  width: 100%;
+  text-align: center;
+  transition: background-color 0.3s;
+}
+
+.message.correct {
+  background-color: #4CAF50; /* Green for correct */
+}
+
+.message.incorrect {
+  background-color: #f44336; /* Red for incorrect */
 }
 
 .display {
   margin: 20px 0;
-  font-size: 3em;
+  text-align: center;
 }
 
 .note {
+  font-size: 4em;
   font-weight: bold;
-  margin-bottom: 10px;
 }
 
 .interval {
-  font-size: 0.8em;
+  font-size: 2em;
   color: #555;
 }
 
 .answer-buttons {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
   gap: 10px;
-  width: 90%;
-  max-width: 600px;
+  margin-bottom: 50px; /* Space for the "Next" button */
 }
 
-.answer-buttons button {
+.answer-button {
   padding: 15px;
+  font-size: 1em;
   background-color: #8BC34A;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.2s, transform 0.2s;
+  transition: background-color 0.3s, transform 0.3s;
 }
 
-.answer-buttons button:hover {
-  background-color: #79b437;
-  transform: translateY(-2px);
+.answer-button.correct {
+  background-color: #4CAF50; /* Green for correct */
+  border: 2px solid #4CAF50; /* Solid border for emphasis */
 }
 
-footer.message {
-  padding: 20px;
+.answer-button.incorrect {
+  background-color: #f44336; /* Red for incorrect */
+  border: 2px solid #f44336; /* Solid border for emphasis */
+}
+
+.answer-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+footer {
   width: 100%;
-  text-align: center;
-  color: #333;
+  display: flex;
+  justify-content: center;
 }
 
-@media (min-width: 768px) {
-  .display {
-    font-size: 5em;
+.next-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  font-size: 2em; /* Large size for the arrow */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.next-button:hover {
+  background-color: #367c2b;
+  transform: scale(1.1); /* Slightly larger on hover */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .note {
+    font-size: 3em;
   }
 
   .interval {
-    font-size: 1em;
+    font-size: 1.5em;
   }
 
   .answer-buttons {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  .answer-buttons button {
-    padding: 20px;
+  .next-button {
+    font-size: 1.5em; /* Smaller arrow for smaller screens */
   }
 }

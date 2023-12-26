@@ -55,8 +55,13 @@ export function randomNote() {
   return randomNote;
 }
 
+// Returns a value from [-12, -1] or [1, 12].
 export function randomInterval() {
-  return randomIntInc(-12, 12);
+  const random = randomIntInc(-12, 11);
+  if (random >= 0) {
+    return random + 1
+  }
+  return random;
 }
 
 export function notesEqual(a, b) {
@@ -89,6 +94,7 @@ const lookupFlat = {
 export function noteRepr(
   note,
   displayBoth,
+  seed,
 ) {
   if (!(note in lookupFlat)) {
     return note
@@ -99,7 +105,7 @@ export function noteRepr(
     return `${note}/${flat}`;
   } else {
     // Choose between which enharmonic to return
-    if (randomIntInc(0, 1) == 0) {
+    if (Math.round(seed) == 0) {
       return note;
     } else {
       return flat;
