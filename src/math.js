@@ -1,3 +1,5 @@
+// TODO: rename to music
+
 // Meant to encapsulate the interval math
 /*
    | |   | | |
@@ -22,7 +24,7 @@
 //   'A♯/B♭',
 //   'B',
 // ];
-const notes = [
+export const notes = [
   'C',
   'C♯',
   'D',
