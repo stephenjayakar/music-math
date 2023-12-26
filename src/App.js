@@ -4,53 +4,48 @@ import './App.css';
 
 function App() {
   const [randomNoteAndInterval, setRandomNoteAndInterval] = useState({});
-  const [message, setMessage] = useState(null);
+  const [message, setMessage] = useState('');
 
-  // Placeholder function to simulate fetching data
+  useEffect(() => {
+    setRandomNoteAndInterval({
+      note: music.randomNote(),
+      interval: music.randomInterval(),
+    });
+  }, []);
+
+  const submitAnswer = (answer) => {
+    const expected = music.intervalNote(
+      randomNoteAndInterval.note,
+      randomNoteAndInterval.interval,
+    );
+    setMessage(music.notesEqual(answer, expected) ? "Got it!" : `Oops, it was supposed to be ${expected}`);
+  };
+
   const resetRandomNoteAndInterval = () => {
     setRandomNoteAndInterval({
       note: music.randomNote(),
       interval: music.randomInterval(),
     });
-    setMessage(null)
+    setMessage('');
   };
 
-  const submitAnswer = (answer) => {
-    if (!randomNoteAndInterval) {
-      return;
-    }
-    const expected = music.intervalNote(
-      randomNoteAndInterval.note,
-      randomNoteAndInterval.interval,
-    );
-    if (music.notesEqual(answer, expected)) {
-      setMessage("Got it!")
-    } else {
-      setMessage("Oops, it was supposed to be " + expected)
-    }
-  }
-
-  useEffect(() => {
-    resetRandomNoteAndInterval();
-  }, []);
-
   return (
-    <div className="app-container">
-      <div className="content">
-        <button className="next-button" onClick={()=>resetRandomNoteAndInterval()}>Next</button>
-        {randomNoteAndInterval && (
-          <div className="note-interval-display">
-            <p className="note-display">{randomNoteAndInterval.note}</p>
-            <p className="interval-display">{randomNoteAndInterval.interval}</p>
-          </div>
-        )}
-        <div className="answers-container">
-          {music.notes.map((answer) =>
-            <button className="answer-button" onClick={() => submitAnswer(answer)}>{answer}</button>
-          )}
+    <div className="app">
+      <header>
+        <button onClick={resetRandomNoteAndInterval}>Next</button>
+      </header>
+      <main>
+        <div className="display">
+          <div className="note">{music.noteRepr(randomNoteAndInterval.note, false)}</div>
+          <div className="interval">{randomNoteAndInterval.interval}</div>
         </div>
-        {message && <p className="message">{message}</p>}
-      </div>
+        <div className="answer-buttons">
+          {music.notes.map((note, index) => (
+            <button key={index} onClick={() => submitAnswer(note)}>{music.noteRepr(note, true)}</button>
+          ))}
+        </div>
+      </main>
+      {message && <footer className="message">{message}</footer>}
     </div>
   );
 }

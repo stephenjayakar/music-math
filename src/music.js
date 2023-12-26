@@ -39,7 +39,7 @@ export const notes = [
   'B',
 ];
 
-function randomIntInc(min, max) {
+export function randomIntInc(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
@@ -74,4 +74,35 @@ export function intervalNote(note, interval) {
     newIndex = notes.length + newIndex;
   }
   return notes[newIndex];
+}
+
+const lookupFlat = {
+  'C♯': 'D♭',
+  'D♯': 'E♭',
+  'F♯': 'G♭',
+  'G♯': 'A♭',
+  'A♯': 'B♭',
+}
+
+// Returns string representation of a note. This may alternate between
+// enharmonics or display both.
+export function noteRepr(
+  note,
+  displayBoth,
+) {
+  if (!(note in lookupFlat)) {
+    return note
+  }
+
+  const flat = lookupFlat[note];
+  if (displayBoth) {
+    return `${note}/${flat}`;
+  } else {
+    // Choose between which enharmonic to return
+    if (randomIntInc(0, 1) == 0) {
+      return note;
+    } else {
+      return flat;
+    }
+  }
 }
