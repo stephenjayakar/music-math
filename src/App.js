@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import * as music from './math';
+import * as music from './music';
+import './App.css';
 
 function App() {
   const [randomNoteAndInterval, setRandomNoteAndInterval] = useState({});
@@ -34,19 +35,22 @@ function App() {
   }, []);
 
   return (
-    <div>
-      <button onClick={()=>resetRandomNoteAndInterval()}>Next</button>
-      {randomNoteAndInterval && (
-        <>
-          <p>Note: {randomNoteAndInterval.note} Interval: {randomNoteAndInterval.interval}</p>
-          <div>
-            {music.notes.map((answer) =>
-              <button onClick={() => submitAnswer(answer)}>{answer}</button>
-            )}
+    <div className="app-container">
+      <div className="content">
+        <button className="next-button" onClick={()=>resetRandomNoteAndInterval()}>Next</button>
+        {randomNoteAndInterval && (
+          <div className="note-interval-display">
+            <p className="note-display">{randomNoteAndInterval.note}</p>
+            <p className="interval-display">{randomNoteAndInterval.interval}</p>
           </div>
-        </>
-      )}
-      {message && <p>{message}</p>}
+        )}
+        <div className="answers-container">
+          {music.notes.map((answer) =>
+            <button className="answer-button" onClick={() => submitAnswer(answer)}>{answer}</button>
+          )}
+        </div>
+        {message && <p className="message">{message}</p>}
+      </div>
     </div>
   );
 }
