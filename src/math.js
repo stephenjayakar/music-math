@@ -37,8 +37,12 @@ const notes = [
   'B',
 ];
 
+function randomIntInc(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 export function randomNote() {
-  const randomNote = notes[Math.floor((Math.random() * notes.length))]
+  const randomNote = notes[randomIntInc(0, notes.length - 1)]
 
   // Return only one side of the `/`, not both
   // if (randomNote.includes('/')) {
@@ -47,6 +51,10 @@ export function randomNote() {
   // } else {}
 
   return randomNote;
+}
+
+export function randomInterval() {
+  return randomIntInc(-12, 12);
 }
 
 export function notesEqual(a, b) {

@@ -1,23 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
+import * as math from './math';
 
 function App() {
+  const [randomNoteAndInterval, setRandomNoteAndInterval] = useState({});
+
+  // Placeholder function to simulate fetching data
+  const resetRandomNoteAndInterval = () => {
+    setRandomNoteAndInterval({
+      note: math.randomNote(),
+      interval: math.randomInterval(),
+    });
+  };
+
+  useEffect(() => {
+    resetRandomNoteAndInterval();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {randomNoteAndInterval && (
+        <p>Note: {randomNoteAndInterval.note} Interval: {randomNoteAndInterval.interval}</p>
+      )}
     </div>
   );
 }
