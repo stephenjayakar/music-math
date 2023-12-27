@@ -2,22 +2,28 @@ import React, { useState, useEffect } from "react";
 import * as music from "./music";
 import "./App.css";
 
-function App() {
-  const [randomNoteAndInterval, setRandomNoteAndInterval] = useState({});
-  const [selectedAnswer, setSelectedAnswer] = useState(null);
-  const [isCorrect, setIsCorrect] = useState(null);
-  // Used to keep the enharmonic display consistent on rerenders
-  // (before submitting).
-  const [seed, setSeed] = useState(0);
+interface RandomNoteAndInterval {
+  note: string;
+  interval: number;
+}
+
+const App: React.FC = () => {
+  const [randomNoteAndInterval, setRandomNoteAndInterval] =
+    useState<RandomNoteAndInterval>({ note: "", interval: 0 });
+  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
+  const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+  const [seed, setSeed] = useState<number>(0);
 
   useEffect(() => {
     setRandomNoteAndInterval({
       note: music.randomNote(),
       interval: music.randomInterval(),
     });
+    // Use an effect to set a seed for consistent rendering of enharmonics
+    setSeed(Math.random());
   }, []);
 
-  const submitAnswer = (answer) => {
+  const submitAnswer = (answer: string) => {
     setSelectedAnswer(answer);
     const expected = music.intervalNote(
       randomNoteAndInterval.note,
@@ -36,7 +42,7 @@ function App() {
     setSeed(Math.random());
   };
 
-  const getButtonClass = (note) => {
+  const getButtonClass = (note: string) => {
     if (selectedAnswer === note) {
       return isCorrect ? "answer-button correct" : "answer-button incorrect";
     }
@@ -84,6 +90,6 @@ function App() {
       )}
     </div>
   );
-}
+};
 
 export default App;
