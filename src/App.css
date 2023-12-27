@@ -71,6 +71,7 @@ main {
 .answer-button.correct {
   background-color: #4CAF50; /* Green for correct */
   border: 2px solid #4CAF50; /* Solid border for emphasis */
+  animation: correctPulse 1s ease-in-out infinite;
 }
 
 .answer-button.incorrect {
@@ -102,7 +103,7 @@ footer {
 
 .next-button:hover {
   background-color: #367c2b;
-  transform: scale(1.1); /* Slightly larger on hover */
+  transform: scale(1.05); /* Slightly larger on hover */
 }
 
 /* Responsive adjustments */
@@ -121,5 +122,16 @@ footer {
 
   .next-button {
     font-size: 1.5em; /* Smaller arrow for smaller screens */
+  }
+}
+
+@keyframes correctPulse {
+  0%, 100% {
+    background-color: #4CAF50; /* Original button color */
+    transform: scale(1);
+  }
+  50% {
+    background-color: #2e7d32; /* Slightly darker green */
+    transform: scale(1.1);
   }
 }
