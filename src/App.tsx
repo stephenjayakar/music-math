@@ -7,29 +7,34 @@ interface RandomNoteAndInterval {
   interval: number;
 }
 
+type AnswerState =
+  | { type: "AWAITING_ANSWER" }
+  | { type: "CORRECT"; correctAnswer: string }
+  | { type: "INCORRECT"; correctAnswer: string };
+
 const App: React.FC = () => {
   const [randomNoteAndInterval, setRandomNoteAndInterval] =
     useState<RandomNoteAndInterval>({ note: "", interval: 0 });
-  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
-  const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
-  const [seed, setSeed] = useState<number>(0);
+  const [answerState, setAnswerState] = useState<AnswerState>({
+    type: "AWAITING_ANSWER",
+  });
+  const [seed, setSeed] = useState<number>(Math.random());
 
   useEffect(() => {
-    setRandomNoteAndInterval({
-      note: music.randomNote(),
-      interval: music.randomInterval(),
-    });
-    // Use an effect to set a seed for consistent rendering of enharmonics
-    setSeed(Math.random());
+    resetRandomNoteAndInterval();
   }, []);
 
   const submitAnswer = (answer: string) => {
-    setSelectedAnswer(answer);
     const expected = music.intervalNote(
       randomNoteAndInterval.note,
       randomNoteAndInterval.interval
     );
-    setIsCorrect(music.notesEqual(answer, expected));
+
+    if (music.notesEqual(answer, expected)) {
+      setAnswerState({ type: "CORRECT", correctAnswer: expected });
+    } else {
+      setAnswerState({ type: "INCORRECT", correctAnswer: expected });
+    }
   };
 
   const resetRandomNoteAndInterval = () => {
@@ -37,29 +42,44 @@ const App: React.FC = () => {
       note: music.randomNote(),
       interval: music.randomInterval(),
     });
-    setSelectedAnswer(null);
-    setIsCorrect(null);
+    setAnswerState({ type: "AWAITING_ANSWER" });
     setSeed(Math.random());
   };
 
   const getButtonClass = (note: string) => {
-    if (selectedAnswer === note) {
-      return isCorrect ? "answer-button correct" : "answer-button incorrect";
+    switch (answerState.type) {
+      case "CORRECT": {
+        if (answerState.correctAnswer === note) {
+          return "answer-button correct";
+        } else {
+          return "answer-button";
+        }
+      }
+      case "INCORRECT": {
+        if (answerState.correctAnswer === note) {
+          return "answer-button correct";
+        } else {
+          return "answer-button incorrect";
+        }
+      }
+      case "AWAITING_ANSWER": {
+        return "answer-button";
+      }
     }
-    return "answer-button";
   };
 
   return (
     <div className="app">
       <main>
-        {isCorrect != null && (
-          <div className={`message ${isCorrect ? "correct" : "incorrect"}`}>
-            {isCorrect
+        {answerState.type !== "AWAITING_ANSWER" && (
+          <div
+            className={`message ${
+              answerState.type === "CORRECT" ? "correct" : "incorrect"
+            }`}
+          >
+            {answerState.type === "CORRECT"
               ? "Correct!"
-              : `Oops! It was supposed to be ${music.intervalNote(
-                  randomNoteAndInterval.note,
-                  randomNoteAndInterval.interval
-                )}`}
+              : `Oops! It was supposed to be ${answerState.correctAnswer}`}
           </div>
         )}
         <div className="display">
@@ -74,14 +94,14 @@ const App: React.FC = () => {
               key={index}
               className={getButtonClass(note)}
               onClick={() => submitAnswer(note)}
-              disabled={isCorrect != null}
+              disabled={answerState.type !== "AWAITING_ANSWER"}
             >
               {music.noteRepr(note, true, seed)}
             </button>
           ))}
         </div>
       </main>
-      {isCorrect != null && (
+      {answerState.type !== "AWAITING_ANSWER" && (
         <footer>
           <button className="next-button" onClick={resetRandomNoteAndInterval}>
             &rarr;
